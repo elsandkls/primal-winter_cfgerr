@@ -101,8 +101,41 @@ public class ForgeConfig extends Config
 
     public void updateCaches()
     {
-        fogColorDayCache = extractColor(fogColorDayValue);
-        fogColorNightCache = extractColor(fogColorNightValue);
+    	int maxAttempts = 40; 
+
+	    for (int attempt = 0; attempt < maxAttempts; attempt++)
+	    {
+	        try
+	        {
+	        	 
+		        //fogColorDayCache = extractColor(fogColorDayValue);
+		        //fogColorNightCache = extractColor(fogColorNightValue);
+	        	 int dayColor = extractColor(fogColorDayValue);
+	             int nightColor = extractColor(fogColorNightValue);
+
+	             // Update both only after both reads succeed.
+	             fogColorDayCache = dayColor;
+	             fogColorNightCache = nightColor;
+
+	             return; // Success: stop retrying.
+	        }
+	        catch (IllegalStateException e)
+	        {
+	            try
+	            {
+	                Thread.sleep(250);
+	            }
+	            catch (InterruptedException interrupted)
+	            {
+	                Thread.currentThread().interrupt();
+	                throw new IllegalStateException(
+	                    "Interrupted while waiting for config values",
+	                    interrupted
+	                );
+	            }
+	        }
+	    }
+		        
     }
 
     @Override
