@@ -101,7 +101,7 @@ public class ForgeConfig extends Config
 
     public void updateCaches()
     {
-    	int maxAttempts = 40; 
+    	int maxAttempts = 60; 
 
 	    for (int attempt = 0; attempt < maxAttempts; attempt++)
 	    {
